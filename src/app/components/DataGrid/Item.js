@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 
 export default class Item extends Component {
-    redirectToDetail () {
-        window.location.hash = `/read?id=${this.props.item.id}`;
+    static redirectToDetail () {
+        // this.props.history.push(`/read?id=${this.props.item.id}`);
     }
 
     render() {
@@ -11,17 +11,11 @@ export default class Item extends Component {
         const itemWidthPerc = (100 / this.props.properties.length);
 
         return (
-            <tr
-                key={rowId}
-                onClick={() => this.redirectToDetail()}
-            >
+            <tr key={rowId} onClick={() => Item.redirectToDetail()}>
                 {
                     this.props.properties.map((property) => {
                         return (
-                            <td
-                                key={property}
-                                style={{ width: `${itemWidthPerc}%` }}
-                            >
+                            <td key={property} style={{ width: `${itemWidthPerc}%` }}>
                                 <p>
                                     {item[property]}
                                 </p>

@@ -1,6 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 
 export default class Header extends Component {
+    static translate (value) {
+        switch (value) {
+            case 'id':
+                return 'ID';
+            case 'firstName':
+                return 'First Name';
+            case 'lastName':
+                return 'Last Name';
+            case 'age':
+                return 'Age';
+            case 'bio':
+                return 'About';
+            case 'startDate':
+                return 'Start Date';
+            default:
+                // console.error(new Error(`Unable to translate value '${value}'`));
+                return value;
+        }
+    }
+
     componentWillMount() {
         this.getDataAllTypes();
     }
@@ -62,26 +82,6 @@ export default class Header extends Component {
         return dataType;
     }
 
-    translate (value) {
-        switch (value) {
-            case 'id':
-                return 'ID';
-            case 'firstName':
-                return 'First Name';
-            case 'lastName':
-                return 'Last Name';
-            case 'age':
-                return 'Age';
-            case 'bio':
-                return 'About';
-            case 'startDate':
-                return 'Start Date';
-            default:
-                // console.error(new Error(`Unable to translate value '${value}'`));
-                return value;
-        }
-    }
-
     render() {
         return (
             <thead>
@@ -89,7 +89,7 @@ export default class Header extends Component {
                     {
                         this.props.properties.map((property) => {
                             const dataType = this.getDataType(property);
-                            const label = this.translate(property);
+                            const label = Header.translate(property);
                             const singleRecord = this.props.numberOfRecords === 1;
                             const className = (!singleRecord && this.props.lastSort.property === property) ? this.props.lastSort.direction : null;
                             const clickEvent = !singleRecord ? () => this.props.sort(property, dataType) : null;

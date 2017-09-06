@@ -4,6 +4,10 @@ import getSelectedItem from './../utilities/getSelectedItem';
 import getItemId from './../utilities/getItemId';
 
 export default class ReadView extends Component {
+    static redirectToList() {
+        window.location.hash = '/';
+    }
+
     constructor(props) {
         super(props);
 
@@ -13,10 +17,6 @@ export default class ReadView extends Component {
             items,
             item: getSelectedItem(getItemId(), items)
         };
-    }
-
-    redirectToList() {
-        window.location.hash = '/';
     }
 
     redirectToUpdate() {
@@ -30,7 +30,7 @@ export default class ReadView extends Component {
     render() {
         return (
             <div data-view="read">
-                <Button onClick={() => this.redirectToList()}>Back to items list</Button>
+                <Button onClick={() => ReadView.redirectToList()}>Back to items list</Button>
 
                 <Form horizontal>
                     <FormGroup controlId="first-name">

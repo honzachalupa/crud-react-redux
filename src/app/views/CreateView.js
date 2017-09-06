@@ -6,6 +6,18 @@ import Toastr from 'toastr';
 import CKEditor from 'react-ckeditor-component';
 
 export default class CreateView extends Component {
+    static isFilled(item) {
+        let i = 0;
+
+        Object.keys(item).forEach((key) => {
+            if (!item[key]) {
+                i += 1;
+            }
+        });
+
+        return i === 0;
+    }
+
     constructor(props) {
         super(props);
 
@@ -65,7 +77,7 @@ export default class CreateView extends Component {
     createItem() {
         const createdItem = this.state.item;
 
-        if (this.isFilled(createdItem)) {
+        if (CreateView.isFilled(createdItem)) {
             this.items.push(createdItem);
 
             localStorage.setItem('items', JSON.stringify(this.items));
@@ -82,18 +94,6 @@ export default class CreateView extends Component {
                 formValid: true
             });
         }
-    }
-
-    isFilled(item) {
-        let i = 0;
-
-        Object.keys(item).forEach((key) => {
-            if (!item[key]) {
-                i++;
-            }
-        });
-
-        return i === 0;
     }
 
     render() {

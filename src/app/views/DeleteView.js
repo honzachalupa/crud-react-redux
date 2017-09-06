@@ -7,6 +7,10 @@ import jQuery from 'jquery';
 import Toastr from 'toastr';
 
 export default class DeleteView extends Component {
+    static handleCancel() {
+        window.history.back();
+    }
+
     constructor(props) {
         super(props);
 
@@ -30,10 +34,6 @@ export default class DeleteView extends Component {
         window.location.hash = '/';
     }
 
-    handleCancel() {
-        window.history.back();
-    }
-
     render() {
         return (
             <div data-view="delete">
@@ -41,7 +41,7 @@ export default class DeleteView extends Component {
 
                 <ButtonGroup>
                     <Button onClick={() => this.handleConfirm()}>Confirm</Button>
-                    <Button onClick={() => this.handleCancel()}>Cancel</Button>
+                    <Button onClick={() => DeleteView.handleCancel()}>Cancel</Button>
                 </ButtonGroup>
             </div>
         );

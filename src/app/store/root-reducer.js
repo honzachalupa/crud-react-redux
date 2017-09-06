@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import addEmployee from './reducers/addEmployee';
+import data from './reducers/data';
 
-const addEmployeeReducer = addEmployee;
+// const dataReducer = data;
 
 const rootReducer = combineReducers({
-    addEmployeeReducer
+    data
 });
 
 export default rootReducer;

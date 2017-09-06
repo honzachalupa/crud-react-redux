@@ -7,6 +7,10 @@ import Toastr from 'toastr';
 import CKEditor from 'react-ckeditor-component';
 
 export default class UpdateView extends Component {
+    static handleCancel() {
+        window.location.hash = '/';
+    }
+
     constructor(props) {
         super(props);
 
@@ -56,14 +60,10 @@ export default class UpdateView extends Component {
         window.location.hash = '/';
     }
 
-    handleCancel() {
-        window.location.hash = '/';
-    }
-
     render() {
         return (
             <div data-view="update">
-                <Button onClick={() => this.handleCancel()}>Back to items list</Button>
+                <Button onClick={() => UpdateView.handleCancel()}>Back to items list</Button>
 
                 <Form horizontal>
                     <FormGroup controlId="first-name">
@@ -115,7 +115,7 @@ export default class UpdateView extends Component {
                         <Col smOffset={2} sm={10}>
                             <ButtonGroup>
                                 <Button onClick={() => this.handleSave()}>Save</Button>
-                                <Button onClick={() => this.handleCancel()}>Cancel</Button>
+                                <Button onClick={() => UpdateView.handleCancel()}>Cancel</Button>
                             </ButtonGroup>
                         </Col>
                     </FormGroup>

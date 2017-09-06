@@ -91,7 +91,7 @@ export default class DataGrid extends Component {
     }
 
     render() {
-        const items = this.props.employees || [];
+        const items = this.props.items || [];
 
         const numberOfRecords = items.length;
         const properties = DataGrid.getProperties(items);
@@ -128,10 +128,3 @@ export default class DataGrid extends Component {
         );
     }
 }
-
-DataGrid.defaultProps = {
-    lastSort: {
-        property: null,
-        direction: null
-    }
-};
