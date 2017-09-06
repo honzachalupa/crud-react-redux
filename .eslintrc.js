@@ -3,7 +3,8 @@ module.exports = {
     extends: ['airbnb', 'plugin:flowtype/recommended'],
     plugins: ['flowtype', 'fp'],
     env: {
-        browser: true
+        browser: true,
+        es6: true
     },
     rules: {
         'arrow-body-style': 0,
@@ -43,5 +44,5 @@ module.exports = {
         // 'sort-keys': 2,
         'space-before-function-paren': 0,
         strict: 0
-    },
+    }
 };

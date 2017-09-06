@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import counter from '../components/plus-one/reducer';
+import addEmployee from './reducers/addEmployee';
+
+const addEmployeeReducer = addEmployee;
 
 const rootReducer = combineReducers({
-    counter
+    addEmployeeReducer
 });
 
 export default rootReducer;

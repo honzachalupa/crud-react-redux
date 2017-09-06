@@ -22,10 +22,6 @@ gulp.task('serve', ['prepare'], () => {
         open: false
     }, (unknown, bs) => {
         const finalPort = bs.options.get('port');
-        copyToClipboard(
-            `localhost:${finalPort}`,
-            () => gutil.log(gutil.colors.green('Local server address has been copied to your clipboard'))
-        );
     });
 
     const watch = (glob, tasks) => gwatch(glob, () => runSequence(...tasks));

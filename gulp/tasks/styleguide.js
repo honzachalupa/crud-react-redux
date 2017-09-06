@@ -21,5 +21,5 @@ const styleguideOptions = {
 };
 
 gulp.task('styleguide', (cb) => {
-    kss(styleguideOptions, cb);
+    // kss(styleguideOptions, cb);
 });
