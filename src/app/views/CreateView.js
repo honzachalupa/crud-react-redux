@@ -9,28 +9,35 @@ import FormFooter from './../components/Form/Footer';
 import Toastr from 'toastr';
 
 class CreateView extends Component {
-    static isFilled(item) {
-        let filled = true;
+    static isValid(item) {
+        let isValid = true;
 
         Object.keys(item).forEach((key) => {
             if (item[key] === null) {
-                filled = false;
+                isValid = false;
             }
         });
 
-        return filled;
+        return isValid;
     }
 
     constructor() {
         super();
 
         this.createItem = this.createItem.bind(this);
+        this.updateTempItem = this.updateTempItem.bind(this);
+    }
+
+    updateTempItem(item) {
+        this.setState({
+            item
+        });
     }
 
     createItem() {
         const { item } = this.state;
 
-        if (CreateView.isFilled(item)) {
+        if (CreateView.isValid(item)) {
             Toastr.success('New employee was added...', 'Great!'); // To-do
 
             this.props.addItem(item);
@@ -42,26 +49,24 @@ class CreateView extends Component {
 
     render() {
         return (
-            <div data-view="create">
-                <Form view="edit">
-                    <FormHeader>
-                        <Link to="/" className="btn">
-                            Back to items list
-                        </Link>
+            <Form updateTempItem={this.updateTempItem}>
+                <FormHeader>
+                    <Link to="/" className="btn">
+                        Back to items list
+                    </Link>
 
-                        <h2>Create new item</h2>
-                    </FormHeader>
-                    <FormFooter>
-                        <FormGroup>
-                            <Col smOffset={2} sm={10}>
-                                <Button onClick={() => this.createItem()}>
-                                    Create Item
-                                </Button>
-                            </Col>
-                        </FormGroup>
-                    </FormFooter>
-                </Form>
-            </div>
+                    <h2>Create new item</h2>
+                </FormHeader>
+                <FormFooter>
+                    <FormGroup>
+                        <Col smOffset={2} sm={10}>
+                            <Button onClick={() => this.createItem()}>
+                                Create Item
+                            </Button>
+                        </Col>
+                    </FormGroup>
+                </FormFooter>
+            </Form>
         );
     }
 }

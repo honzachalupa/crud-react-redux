@@ -101,14 +101,8 @@ class Header extends Component {
                             const clickEvent = !singleRecord ? () => this.handleClick() : null;
 
                             return (
-                                <td
-                                    // className={className}
-                                    key={label}
-                                    data-type={dataType}
-                                >
-                                    <button
-                                        onClick={clickEvent}
-                                    >
+                                <td key={label} data-type={dataType} >
+                                    <button onClick={clickEvent}>
                                         {label}
                                     </button>
                                 </td>
@@ -122,10 +116,11 @@ class Header extends Component {
 }
 
 export default connect((store) => {
-    const { items } = store.data;
+    const { items, formFields } = store.data;
 
     return {
-        items
+        items,
+        formFields
     };
 }, {
     sortItems

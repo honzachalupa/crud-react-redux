@@ -42,6 +42,14 @@ const defaultState = {
             bio: 'Bla bla bla...',
             bio_HTML: '<p>Bla bla bla...</p>',
             start_date: '2016-09-01'
+        }, {
+            id: 3333,
+            first_name: 'Martin',
+            last_name: 'Dušek',
+            age: 33,
+            bio: 'Bla bla bla...',
+            bio_HTML: '<p>Bla bla bla...</p>',
+            start_date: '2014-03-01'
         }
     ]
 };
@@ -49,28 +57,30 @@ const defaultState = {
 export default function data(state = defaultState, action) {
     switch (action.type) {
         case actions.ADD_ITEM: {
-            const { item } = action;
+            const { item: newItem } = action;
 
-            item.id = generateId(state.items);
+            newItem.id = generateId(state.items);
 
             return {
                 ...state,
-                items: [...state.items, item]
+                items: [...state.items, newItem]
             };
         }
         case actions.UPDATE_ITEM: {
-            const { item: updatingItem } = action;
-            const { id: updatingId } = updatingItem;
+            const { item: updatedItem } = action;
+            const { id: updatedId } = updatedItem;
+
+            const updatedItems = state.items.map((item) => {
+                if (item.id.toString() === updatedId.toString()) {
+                    return updatedItem;
+                }
+
+                return item;
+            });
 
             return {
                 ...state,
-                items: state.items.map((item) => {
-                    if (item.id.toString() === updatingId) {
-                        return updatingItem;
-                    }
-
-                    return item;
-                })
+                items: updatedItems
             };
         }
         case actions.DELETE_ITEM: {
@@ -83,10 +93,13 @@ export default function data(state = defaultState, action) {
         }
         case actions.SORT: {
             const { sorting } = action;
+            const { x, y } = sorting;
+
+            const itemsSorted = sort(state.items, x, y);
 
             return {
                 ...state,
-                sorting
+                items: [...state.items, itemsSorted]
             };
         }
         default:
@@ -103,11 +116,16 @@ function generateId(items) {
         });
     }
 
-    const generatedId = Math.round(Math.random() * 10000);
+    const generatedId = Math.round(Math.random() * 10000).toString();
 
     if (existingIds.indexOf(generatedId) > -1 || generatedId < 1000 || generatedId > 9999) {
         generateId();
     }
 
     return generatedId;
+}
+
+function sort(items, x, y) {
+
+    return items;
 }

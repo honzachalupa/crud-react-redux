@@ -16,22 +16,30 @@ class UpdateView extends Component {
     constructor(props) {
         super(props);
 
+        this.updateTempItem = this.updateTempItem.bind(this);
+
         const { items, match } = props;
         const { id: selectedId } = match.params;
 
         items.forEach((item) => {
             if (item.id.toString() === selectedId) {
                 this.state = {
-                    item
+                    item: Object.assign({}, item)
                 };
             }
+        });
+    }
+
+    updateTempItem(item) {
+        this.setState({
+            item
         });
     }
 
     handleSave() {
         const { item } = this.state;
 
-        // this.props.updateItem(item);
+        this.props.updateItem(item);
 
         Toastr.success('Employee\'s details were updated.');
 
@@ -46,7 +54,7 @@ class UpdateView extends Component {
         const { item } = this.state;
 
         return (
-            <Form view="change" item={item}>
+            <Form item={item} updateTempItem={this.updateTempItem}>
                 <FormHeader>
                     <Link to="/" className="btn">
                         Back to items list

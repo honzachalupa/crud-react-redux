@@ -12,12 +12,12 @@ class GenericForm extends Component {
     constructor(props) {
         super(props);
 
-        const { view, item, formFields } = this.props;
+        const { isReadOnly, item, formFields } = this.props;
         const itemDataPlaceholder = {};
 
         if (item) {
             this.state = {
-                view,
+                isReadOnly,
                 item
             };
         } else if (formFields) {
@@ -27,13 +27,23 @@ class GenericForm extends Component {
             });
 
             this.state = {
-                view,
+                isReadOnly,
                 item: itemDataPlaceholder
             };
         }
     }
 
+    componentDidMount() {
+        const { updateTempItem } = this.props;
+        const { item } = this.state;
+
+        if (updateTempItem) {
+            updateTempItem(item);
+        }
+    }
+
     handleChange(e, property, dataType) {
+        const { updateTempItem } = this.props;
         const { item } = this.state;
 
         if (dataType === 'richtext') {
@@ -45,61 +55,47 @@ class GenericForm extends Component {
             item[property] = e.target.value;
         }
 
-        this.setState({
-            item
-        });
-
-        this.validate();
-    }
-
-    validate() {
-        const { item } = this.state;
-        let isValid = true;
-
-        Object.keys(item).forEach((key) => {
-            if (item[key] === null) {
-                isValid = false;
-            }
-        });
-
-        return isValid;
+        updateTempItem(item);
     }
 
     render() {
-        const { formFields } = this.props;
+        const { formFields, readOnly: isReadOnly } = this.props;
         const { item } = this.state;
 
         const fieldsBlock = formFields.map((field) => {
-            const { label, dataType } = field;
-            const id = GenericForm.labelToId(label);
+            const id = GenericForm.labelToId(field.label);
             let inputBlock;
 
-            if (dataType === 'richtext') {
-                if (this.state.view === 'read') {
-                    const editorConfig = {
+            if (field.dataType === 'richtext') {
+                const value = item[`${id}_HTML`];
+
+                if (isReadOnly) {
+                    const ckEditorConfig = {
                         readOnly: true,
                         toolbarCanCollapse: true,
                         toolbarStartupExpanded: false
                     };
 
                     inputBlock = (
-                        <CKEditor activeClass="p10" config={editorConfig} content={item[id]} />
+                        <CKEditor activeClass="p10" config={ckEditorConfig} content={value} />
                     );
                 } else {
                     inputBlock = (
-                        <CKEditor activeClass="p10" onChange={(value) => this.handleChange(value, id, 'richtext')} content={item[id]} />
+                        <CKEditor activeClass="p10" onChange={(value) => this.handleChange(value, id, 'richtext')} content={value} />
                     );
                 }
             } else { // Text, number, date, ...
+                const value = item[id];
+
                 inputBlock = (
-                    <FormControl type={field.dataType} disabled={this.state.view === 'read'} placeholder={label} defaultValue={item[id]} onChange={(e) => this.handleChange(e, id)} />
+                    <FormControl type={field.dataType} disabled={isReadOnly} defaultValue={value} onChange={(e) => this.handleChange(e, id)} />
                 );
             }
 
             return (
                 <FormGroup key={id}>
                     <Col componentClass={ControlLabel} sm={2}>
-                        {label}
+                        {field.label}
                     </Col>
                     <Col sm={10}>
                         {inputBlock}
@@ -110,11 +106,9 @@ class GenericForm extends Component {
 
         return (
             <Form horizontal>
-                {this.props.children[0]}
-
+                {this.props.children ? this.props.children[0] : null}
                 {fieldsBlock}
-
-                {this.props.children[1]}
+                {this.props.children ? this.props.children[1] : null}
             </Form>
         );
     }
