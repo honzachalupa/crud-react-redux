@@ -1,17 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 
 export default class Item extends Component {
-    static redirectToDetail () {
-        // this.props.history.push(`/read?id=${this.props.item.id}`);
+    redirectToDetail () {
+        const { item, browserHistory } = this.props;
+
+        console.log(browserHistory);
+
+        browserHistory.push(`/read/${item.id}`);
     }
 
     render() {
-        const item = this.props.item;
-        const rowId = item.id;
+        const { item } = this.props;
         const itemWidthPerc = (100 / this.props.properties.length);
 
         return (
-            <tr key={rowId} onClick={() => Item.redirectToDetail()}>
+            <tr key={item.id} onClick={() => this.redirectToDetail()}>
                 {
                     this.props.properties.map((property) => {
                         return (

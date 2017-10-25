@@ -6,6 +6,7 @@ const gwatch = require('gulp-watch');
 const browserSync = require('browser-sync');
 const copyToClipboard = require('copy-paste').copy;
 const runSequence = require('run-sequence');
+const historyFallback = require('connect-history-api-fallback');
 const port = config.PORT;
 
 gulp.task('serve', ['prepare'], () => {
@@ -18,7 +19,12 @@ gulp.task('serve', ['prepare'], () => {
 
     browserSync({
         port,
-        server: { baseDir },
+        server: {
+            baseDir,
+            middleware: [
+                historyFallback()
+            ]
+        },
         open: false
     }, (unknown, bs) => {
         const finalPort = bs.options.get('port');

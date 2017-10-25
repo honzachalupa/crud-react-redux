@@ -1,36 +1,74 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, ButtonGroup, Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { FormGroup, Button, ButtonGroup, Col } from 'react-bootstrap';
+import Form from './../components/Form';
+import FormHeader from './../components/Form/Header';
+import FormFooter from './../components/Form/Footer';
 import getSelectedItem from './../utilities/getSelectedItem';
 import getItemId from './../utilities/getItemId';
 
-export default class ReadView extends Component {
-    static redirectToList() {
-        window.location.hash = '/';
-    }
-
+class ReadView extends Component {
     constructor(props) {
         super(props);
 
-        const items = JSON.parse(localStorage.getItem('items')) || [];
+        const { items, match } = props;
+        const { id: selectedId } = match.params;
 
-        this.state = {
-            items,
-            item: getSelectedItem(getItemId(), items)
-        };
+        items.forEach((item) => {
+            if (item.id.toString() === selectedId) {
+                this.state = {
+                    item
+                };
+            }
+        });
+    }
+
+    redirectToList() {
+        this.props.history.push('/');
     }
 
     redirectToUpdate() {
-        window.location.hash = `/update?id=${this.state.item.id}`;
+        const { item } = this.state;
+        const { id } = item;
+
+        this.props.history.push(`/update/${id}`);
     }
 
     redirectToDelete() {
-        window.location.hash = `/delete?id=${this.state.item.id}`;
+        const { item } = this.state;
+        const { id } = item;
+
+        this.props.history.push(`/delete/${id}`);
     }
 
     render() {
+        const { item } = this.state;
+        console.log(this.props);
+
         return (
-            <div data-view="read">
-                <Button onClick={() => ReadView.redirectToList()}>Back to items list</Button>
+            <Form view="read" item={item}>
+                <FormHeader>
+                    <Link to="/" className="btn">
+                        Back to items list
+                    </Link>
+
+                    <h2>Read</h2>
+                </FormHeader>
+                <FormFooter>
+                    <FormGroup>
+                        <Col smOffset={2} sm={10}>
+                            <ButtonGroup>
+                                <Button onClick={() => this.redirectToUpdate()}>Edit</Button>
+                                <Button onClick={() => this.redirectToDelete()}>Delete</Button>
+                            </ButtonGroup>
+                        </Col>
+                    </FormGroup>
+                </FormFooter>
+            </Form>
+
+            /* <div data-view="read">
+                <Button onClick={() => this.redirectToList()}>Back to items list</Button>
 
                 <Form horizontal>
                     <FormGroup controlId="first-name">
@@ -38,7 +76,7 @@ export default class ReadView extends Component {
                             First name
                         </Col>
                         <Col sm={10}>
-                            <FormControl type="text" disabled placeholder="First name" defaultValue={this.state.item.firstName} />
+                            <FormControl type="text" disabled placeholder="First name" defaultValue={item.firstName} />
                         </Col>
                     </FormGroup>
 
@@ -47,7 +85,7 @@ export default class ReadView extends Component {
                             Last name
                         </Col>
                         <Col sm={10}>
-                            <FormControl type="text" disabled placeholder="Last name" defaultValue={this.state.item.lastName} />
+                            <FormControl type="text" disabled placeholder="Last name" defaultValue={item.lastName} />
                         </Col>
                     </FormGroup>
 
@@ -56,7 +94,7 @@ export default class ReadView extends Component {
                             Age
                         </Col>
                         <Col sm={10}>
-                            <FormControl type="number" disabled placeholder="Age" defaultValue={this.state.item.age} />
+                            <FormControl type="number" disabled placeholder="Age" defaultValue={item.age} />
                         </Col>
                     </FormGroup>
 
@@ -65,7 +103,7 @@ export default class ReadView extends Component {
                             Bio
                         </Col>
                         <Col sm={10}>
-                            <FormControl type="text" disabled placeholder="Bio" defaultValue={this.state.item.bio} />
+                            <FormControl type="text" disabled placeholder="Bio" defaultValue={item.bio} />
                         </Col>
                     </FormGroup>
 
@@ -74,7 +112,7 @@ export default class ReadView extends Component {
                             Start date
                         </Col>
                         <Col sm={10}>
-                            <FormControl type="date" disabled placeholder="Start date" defaultValue={this.state.item.startDate} />
+                            <FormControl type="date" disabled placeholder="Start date" defaultValue={item.startDate} />
                         </Col>
                     </FormGroup>
 
@@ -87,7 +125,16 @@ export default class ReadView extends Component {
                         </Col>
                     </FormGroup>
                 </Form>
-            </div>
+            </div> */
         );
     }
 }
+
+export default connect((store) => {
+    const { items, formFields } = store.data;
+
+    return {
+        items,
+        formFields
+    };
+})(ReadView);

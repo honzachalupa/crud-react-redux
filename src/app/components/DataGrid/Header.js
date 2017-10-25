@@ -1,22 +1,24 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { sort as sortItems } from '../../store/actions/data';
 
-export default class Header extends Component {
-    static translate (value) {
+class Header extends Component {
+    static translate(value) {
         switch (value) {
             case 'id':
                 return 'ID';
-            case 'firstName':
+            case 'first_name':
                 return 'First Name';
-            case 'lastName':
+            case 'last_name':
                 return 'Last Name';
             case 'age':
                 return 'Age';
             case 'bio':
                 return 'About';
-            case 'startDate':
+            case 'start_date':
                 return 'Start Date';
             default:
-                // console.error(new Error(`Unable to translate value '${value}'`));
+                console.error(`Unable to translate value '${value}'`);
                 return value;
         }
     }
@@ -26,7 +28,7 @@ export default class Header extends Component {
     }
 
     componentDidMount() {
-        this.props.sort('id', 'number');
+        // this.props.sort();
     }
 
     getDataAllTypes() {
@@ -82,6 +84,10 @@ export default class Header extends Component {
         return dataType;
     }
 
+    handleClick() {
+        // this.props.sort('id', 'number');
+    }
+
     render() {
         return (
             <thead>
@@ -91,12 +97,12 @@ export default class Header extends Component {
                             const dataType = this.getDataType(property);
                             const label = Header.translate(property);
                             const singleRecord = this.props.numberOfRecords === 1;
-                            const className = (!singleRecord && this.props.lastSort.property === property) ? this.props.lastSort.direction : null;
-                            const clickEvent = !singleRecord ? () => this.props.sort(property, dataType) : null;
+                            // const className = (!singleRecord && this.props.lastSort.property === property) ? this.props.lastSort.direction : null;
+                            const clickEvent = !singleRecord ? () => this.handleClick() : null;
 
                             return (
                                 <td
-                                    className={className}
+                                    // className={className}
                                     key={label}
                                     data-type={dataType}
                                 >
@@ -114,3 +120,13 @@ export default class Header extends Component {
         );
     }
 }
+
+export default connect((store) => {
+    const { items } = store.data;
+
+    return {
+        items
+    };
+}, {
+    sortItems
+})(Header);

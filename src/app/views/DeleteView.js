@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { remove as deleteItem } from '../store/actions/data';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import getSelectedItem from './../utilities/getSelectedItem';
 import getItemId from './../utilities/getItemId';
@@ -6,7 +8,7 @@ import renderMessage from './../utilities/renderMessage';
 import jQuery from 'jquery';
 import Toastr from 'toastr';
 
-export default class DeleteView extends Component {
+class DeleteView extends Component {
     static handleCancel() {
         window.history.back();
     }
@@ -14,24 +16,22 @@ export default class DeleteView extends Component {
     constructor(props) {
         super(props);
 
-        const items = JSON.parse(localStorage.getItem('items')) || [];
+        const { items, match } = props;
+        const { id: selectedId } = match.params;
 
         this.state = {
-            items,
-            item: getSelectedItem(getItemId(), items)
+            selectedId
         };
     }
 
     handleConfirm() {
-        const filteredItems = this.state.items.filter((item) => {
-            return item !== this.state.item;
-        });
+        const { selectedId: id } = this.state;
 
-        localStorage.setItem('items', JSON.stringify(filteredItems));
+        this.props.deleteItem(id);
 
         Toastr.warning('Employee was removed.');
 
-        window.location.hash = '/';
+        this.props.history.push('/');
     }
 
     render() {
@@ -47,3 +47,13 @@ export default class DeleteView extends Component {
         );
     }
 }
+
+export default connect((store) => {
+    const { items } = store.data;
+
+    return {
+        items
+    };
+}, {
+    deleteItem
+})(DeleteView);
