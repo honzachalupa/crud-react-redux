@@ -15,9 +15,11 @@ class Header extends Component {
     }
 
     componentDidMount() {
-        const { formFields } = this.props;
+        this.props.sortItems();
+    }
 
-        this.props.sortItems(formFields[0].label);
+    componentWillUnmount() {
+        this.props.sortItems();
     }
 
     getDataType(property) {

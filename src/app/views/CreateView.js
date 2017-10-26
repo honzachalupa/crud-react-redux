@@ -25,8 +25,9 @@ class CreateView extends Component {
 
     createItem() {
         const { item } = this.state;
+        const { formFields } = this.props;
 
-        if (isItemValid(item)) {
+        if (isItemValid(item, formFields)) {
             Toastr.success('New employee was added...', 'Great!');
 
             this.props.addItem(item);

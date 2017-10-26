@@ -18,7 +18,7 @@ export const remove = (id) => ({
     id
 });
 
-export const sort = (label) => {
+export const sort = (label = 'id') => {
     return {
         type: SORT_ITEMS,
         label

@@ -107,7 +107,7 @@ class GenericForm extends Component {
             }
 
             return (
-                <FormGroup key={id}>
+                <FormGroup key={id} required={field.required}>
                     <Col componentClass={ControlLabel} sm={2}>
                         {field.label}
                     </Col>

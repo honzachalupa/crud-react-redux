@@ -15,19 +15,18 @@ const defaultState = {
             dataType: 'text'
         }, {
             label: 'Last name',
-            dataType: 'text'
+            dataType: 'text',
+            required: true
         }, {
             label: 'Age',
             dataType: 'number'
         }, {
             label: 'Bio',
-            dataType: 'richtext'
+            dataType: 'text'
         }, {
             label: 'Start date',
-            dataType: 'date'
-        }, {
-            label: 'Test field',
-            dataType: 'text'
+            dataType: 'date',
+            required: false
         }
     ],
     items: [

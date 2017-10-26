@@ -1,17 +1,23 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
 
-export function isItemValid(item) {
+export function isItemValid(item, fields) {
     let isValid = true;
 
     Object.keys(item).forEach((key) => {
-        if (item[key] === null) {
-            isValid = false;
-        }
+        const value = item[key];
 
-        if (key === 'id') {
-            isValid = true;
-        }
+        fields.forEach((field) => {
+            if (isValid) {
+                if (key === getIdFromLabel(field.label) && field.required) {
+                    if (isNotNullOrEmpty(value)) {
+                        isValid = false;
+                    }
+                } else if (key === 'id') {
+                    isValid = true;
+                }
+            }
+        });
     });
 
     return isValid;
@@ -19,6 +25,10 @@ export function isItemValid(item) {
 
 export function getIdFromLabel(label) {
     return label.replace(/\s/, '_').toLowerCase();
+}
+
+export function isNotNullOrEmpty(value) {
+    return value === null || value === undefined || value === 'null' || value === 'undefined' || value === '' || value === ' ';
 }
 
 export function renderMessage(style, message) {

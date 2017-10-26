@@ -97,4 +97,7 @@ body {
     }
 }
 
-@import 'components/*';
+.form-group[required] .control-label::after {
+    content: ' *';
+    color: red;
+}

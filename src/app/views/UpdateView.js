@@ -35,8 +35,9 @@ class UpdateView extends Component {
 
     handleSave() {
         const { item } = this.state;
+        const { formFields } = this.props;
 
-        if (isItemValid(item)) {
+        if (isItemValid(item, formFields)) {
             Toastr.success('Employee\'s details were updated.');
 
             this.props.updateItem(item);
@@ -75,10 +76,11 @@ class UpdateView extends Component {
 }
 
 export default connect((store) => {
-    const { items } = store.data;
+    const { items, formFields } = store.data;
 
     return {
-        items
+        items,
+        formFields
     };
 }, {
     updateItem
