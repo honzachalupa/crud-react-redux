@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { update as updateItem } from '../store/actions/data';
+import { update as updateItem } from './../store/actions/data';
 import { FormGroup, Button, ButtonGroup, Col } from 'react-bootstrap';
 import Form from './../components/Form';
 import FormHeader from './../components/Form/Header';
 import FormFooter from './../components/Form/Footer';
-import getSelectedItem from './../utilities/getSelectedItem';
-import getItemId from './../utilities/getItemId';
+import { getSelectedItem, getItemId } from './../helpers';
 import jQuery from 'jquery';
 import Toastr from 'toastr';
 import CKEditor from 'react-ckeditor-component';

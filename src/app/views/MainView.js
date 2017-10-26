@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import { setDynamicDataType } from '../store/actions/data';
+import { setDynamicDataType } from './../store/actions/data';
 import DataGrid from './../components/DataGrid';
 
 const MainView = (props) => {

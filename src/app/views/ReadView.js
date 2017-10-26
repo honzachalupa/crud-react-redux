@@ -5,8 +5,7 @@ import { FormGroup, Button, ButtonGroup, Col } from 'react-bootstrap';
 import Form from './../components/Form';
 import FormHeader from './../components/Form/Header';
 import FormFooter from './../components/Form/Footer';
-import getSelectedItem from './../utilities/getSelectedItem';
-import getItemId from './../utilities/getItemId';
+import { getSelectedItem, getItemId } from './../helpers';
 
 class ReadView extends Component {
     constructor(props) {

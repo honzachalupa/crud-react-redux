@@ -2,9 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { remove as deleteItem } from '../store/actions/data';
 import { Button, ButtonGroup } from 'react-bootstrap';
-import getSelectedItem from './../utilities/getSelectedItem';
-import getItemId from './../utilities/getItemId';
-import renderMessage from './../utilities/renderMessage';
+import { getSelectedItem, getItemId, renderMessage } from './../helpers';
 import jQuery from 'jquery';
 import Toastr from 'toastr';
 
