@@ -148,53 +148,59 @@ function sort(id, items, metadata, fields) {
     const itemsClone = [...items];
     const metadataClone = { ...metadata };
 
-    metadataClone.lastPropName = propertyName;
+    if (metadataClone.lastPropName === propertyName && metadataClone.lastDirection === 'original') {
+        if (propertyType !== 'number') {
+            console.log(1);
 
-    if (metadataClone.lastPropName === propertyName || metadataClone.lastDirection !== 'original') {
-        if (propertyType === 'number') {
-            itemsClone.sort((a, b) => {
-                console.log(1);
-                return a[propertyName] - b[propertyName];
-            });
-        } else {
             itemsClone.sort((a, b) => {
                 if (a[propertyName] < b[propertyName]) {
-                    console.log(2);
-                    return -1;
-                } else if (a[propertyName] > b[propertyName]) {
-                    console.log(3);
                     return 1;
+                } else if (a[propertyName] > b[propertyName]) {
+                    return -1;
                 }
 
-                console.log(4);
                 return 0;
+            });
+        } else {
+            console.log(2);
+
+            itemsClone.sort((a, b) => {
+                return b[propertyName] - a[propertyName];
             });
         }
 
-        metadataClone.lastDirection = metadataClone.lastDirection !== 'original' ? 'original' : 'reversed';
-    } else {
-        if (propertyType === 'number') {
-            itemsClone.sort((a, b) => {
-                console.log(5);
-                return b[propertyName] - a[propertyName];
-            });
+        if (metadataClone.lastPropName === propertyName) {
+            metadataClone.lastDirection = metadataClone.lastDirection !== 'original' ? 'original' : 'reversed';
         } else {
+            metadataClone.lastDirection = 'original';
+        }
+    } else {
+        if (propertyType !== 'number') {
+            console.log(3);
+
             itemsClone.sort((a, b) => {
                 if (a[propertyName] < b[propertyName]) {
-                    console.log(6);
-                    return 1;
-                } else if (a[propertyName] > b[propertyName]) {
-                    console.log(7);
                     return -1;
+                } else if (a[propertyName] > b[propertyName]) {
+                    return 1;
                 }
 
-                console.log(8);
                 return 0;
+            });
+        } else {
+            console.log(4);
+
+            itemsClone.sort((a, b) => {
+                return a[propertyName] - b[propertyName];
             });
         }
 
         metadataClone.lastDirection = 'original';
     }
+
+    metadataClone.lastPropName = propertyName;
+
+    console.log(metadataClone);
 
     return { items: itemsClone, metadata: metadataClone };
 }
