@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import { add as addItem, remove as removeItem, sort as sortItems } from '../store/actions/data';
+import { setDynamicDataType } from '../store/actions/data';
 import DataGrid from './../components/DataGrid';
 
 const MainView = (props) => {
@@ -18,13 +18,9 @@ const MainView = (props) => {
 };
 
 export default connect((store) => {
-    const {
-        items,
-        sorting
-    } = store.data;
+    const { items } = store.data;
 
     return {
-        items,
-        sorting
+        items
     };
 })(MainView);

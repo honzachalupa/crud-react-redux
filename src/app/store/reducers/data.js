@@ -2,13 +2,14 @@ import * as actions from './../actions/data';
 
 const defaultState = {
     sorting: {
-        propertyPrev: 'id',
-        property: '',
-        dataType: '',
-        lastDirection: 'original'
+        lastPropName: null,
+        lastDirection: null
     },
     formFields: [
         {
+            label: 'ID',
+            dataType: 'number'
+        }, {
             label: 'First name',
             dataType: 'text'
         }, {
@@ -92,19 +93,23 @@ export default function data(state = defaultState, action) {
             };
         }
         case actions.SORT: {
-            const { sorting } = action;
-            const { x, y } = sorting;
-
-            const itemsSorted = sort(state.items, x, y);
+            const { label } = action;
+            const { items, sorting, formFields } = state;
+            const { items: itemsSorted, metadata } = sort(labelToId(label), items, sorting, formFields);
 
             return {
                 ...state,
-                items: [...state.items, itemsSorted]
+                items: itemsSorted,
+                sorting: metadata
             };
         }
         default:
             return state;
     }
+}
+
+function labelToId(label) {
+    return label.replace(/\s/, '_').toLowerCase();
 }
 
 function generateId(items) {
@@ -125,7 +130,120 @@ function generateId(items) {
     return generatedId;
 }
 
-function sort(items, x, y) {
+function getDataType(id, formFields) {
+    let dataType;
 
-    return items;
+    formFields.forEach((field) => {
+        if (labelToId(field.label) === id.toString()) {
+            dataType = field.dataType;
+        }
+    });
+
+    return dataType;
 }
+
+function sort(id, items, metadata, fields) {
+    const propertyName = id;
+    const propertyType = getDataType(id, fields);
+    const itemsClone = [...items];
+    const metadataClone = { ...metadata };
+
+    metadataClone.lastPropName = propertyName;
+
+    if (metadataClone.lastPropName === propertyName || metadataClone.lastDirection !== 'original') {
+        if (propertyType === 'number') {
+            itemsClone.sort((a, b) => {
+                console.log(1);
+                return a[propertyName] - b[propertyName];
+            });
+        } else {
+            itemsClone.sort((a, b) => {
+                if (a[propertyName] < b[propertyName]) {
+                    console.log(2);
+                    return -1;
+                } else if (a[propertyName] > b[propertyName]) {
+                    console.log(3);
+                    return 1;
+                }
+
+                console.log(4);
+                return 0;
+            });
+        }
+
+        metadataClone.lastDirection = metadataClone.lastDirection !== 'original' ? 'original' : 'reversed';
+    } else {
+        if (propertyType === 'number') {
+            itemsClone.sort((a, b) => {
+                console.log(5);
+                return b[propertyName] - a[propertyName];
+            });
+        } else {
+            itemsClone.sort((a, b) => {
+                if (a[propertyName] < b[propertyName]) {
+                    console.log(6);
+                    return 1;
+                } else if (a[propertyName] > b[propertyName]) {
+                    console.log(7);
+                    return -1;
+                }
+
+                console.log(8);
+                return 0;
+            });
+        }
+
+        metadataClone.lastDirection = 'original';
+    }
+
+    return { items: itemsClone, metadata: metadataClone };
+}
+
+/* function sortFunction(items, property) {
+    if (propertyPrev !== property || lastDirection === 'reversed') {
+        if (dataType === 'number') {
+            items.sort((a, b) => {
+                return a[property] - b[property];
+            });
+        } else {
+            items.sort((a, b) => {
+                if (a[property] < b[property]) {
+                    return -1;
+                } else if (a[property] > b[property]) {
+                    return 1;
+                }
+
+                return 0;
+            });
+        }
+    } else {
+        if (dataType === 'number') {
+            items.sort((a, b) => {
+                return b[property] - a[property];
+            });
+        } else {
+            items.sort((a, b) => {
+                if (a[property] < b[property]) {
+                    return 1;
+                } else if (a[property] > b[property]) {
+                    return -1;
+                }
+
+                return 0;
+            });
+        }
+    }
+
+    const dataType = '';
+    const lastDirection = '';
+
+    return {
+        items: '',
+        sorted: {
+            propertyPrev: property,
+            property,
+            dataType,
+            lastDirection: lastDirection === 'reversed' ? 'original' : 'reversed'
+        }
+    };
+} */

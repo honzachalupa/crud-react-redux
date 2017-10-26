@@ -16,6 +16,10 @@ class CreateView extends Component {
             if (item[key] === null) {
                 isValid = false;
             }
+
+            if (key === 'id') {
+                isValid = true;
+            }
         });
 
         return isValid;
@@ -38,7 +42,7 @@ class CreateView extends Component {
         const { item } = this.state;
 
         if (CreateView.isValid(item)) {
-            Toastr.success('New employee was added...', 'Great!'); // To-do
+            Toastr.success('New employee was added...', 'Great!');
 
             this.props.addItem(item);
             this.props.history.push('/');

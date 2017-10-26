@@ -18,61 +18,9 @@ export const remove = (id) => ({
     id
 });
 
-export const sort = (items, sorting) => {
-    const sortResult = sortFunction(items, sorting.property);
-
+export const sort = (label) => {
     return {
         type: SORT,
-        items: sortResult.items,
-        sorting: sortResult.sorting
+        label
     };
 };
-
-function sortFunction(items, property) {
-    /* if (propertyPrev !== property || lastDirection === 'reversed') {
-        if (dataType === 'number') {
-            items.sort((a, b) => {
-                return a[property] - b[property];
-            });
-        } else {
-            items.sort((a, b) => {
-                if (a[property] < b[property]) {
-                    return -1;
-                } else if (a[property] > b[property]) {
-                    return 1;
-                }
-
-                return 0;
-            });
-        }
-    } else {
-        if (dataType === 'number') {
-            items.sort((a, b) => {
-                return b[property] - a[property];
-            });
-        } else {
-            items.sort((a, b) => {
-                if (a[property] < b[property]) {
-                    return 1;
-                } else if (a[property] > b[property]) {
-                    return -1;
-                }
-
-                return 0;
-            });
-        }
-    } */
-
-    const dataType = '';
-    const lastDirection = '';
-
-    return {
-        items: '',
-        sorted: {
-            propertyPrev: property,
-            property,
-            dataType,
-            lastDirection: lastDirection === 'reversed' ? 'original' : 'reversed'
-        }
-    };
-}

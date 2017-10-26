@@ -62,7 +62,15 @@ class GenericForm extends Component {
         const { formFields, readOnly: isReadOnly } = this.props;
         const { item } = this.state;
 
-        const fieldsBlock = formFields.map((field) => {
+        const fieldsFiltered = formFields.filter((field) => {
+            if (GenericForm.labelToId(field.label) === 'id') {
+                return 0;
+            }
+
+            return 1;
+        });
+
+        const fieldsBlock = fieldsFiltered.map((field) => {
             const id = GenericForm.labelToId(field.label);
             let inputBlock;
 

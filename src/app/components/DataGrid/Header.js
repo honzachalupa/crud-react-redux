@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { sort as sortItems } from '../../store/actions/data';
 
 class Header extends Component {
-    static translate(value) {
+    /* static translate(value) {
         switch (value) {
             case 'id':
                 return 'ID';
@@ -21,17 +21,33 @@ class Header extends Component {
                 console.error(`Unable to translate value '${value}'`);
                 return value;
         }
+    } */
+
+    static labelToId(label) {
+        return label.replace(/\s/, '_').toLowerCase();
+    }
+
+    constructor(props) {
+        super(props);
+
+        const { items } = props;
+
+        this.state = {
+            numberOfRecords: items.length
+        };
     }
 
     componentWillMount() {
-        this.getDataAllTypes();
+        // this.getDataAllTypes();
     }
 
     componentDidMount() {
-        // this.props.sort();
+        const { formFields } = this.props;
+
+        this.props.sortItems(formFields[0].label);
     }
 
-    getDataAllTypes() {
+    /* getDataAllTypes() {
         const valuesAll = {};
         const dataTypes = {};
 
@@ -70,39 +86,41 @@ class Header extends Component {
         this.setState({
             dataTypes
         });
-    }
+    } */
 
     getDataType(property) {
+        const { dataTypes } = this.state;
         let dataType = 'text';
 
-        Object.keys(this.state.dataTypes).forEach((key) => {
+        Object.keys(dataTypes).forEach((key) => {
             if (property === key) {
-                dataType = this.state.dataTypes[key];
+                dataType = dataTypes[key];
             }
         });
 
         return dataType;
     }
 
-    handleClick() {
-        // this.props.sort('id', 'number');
+    handleClick(label) {
+        this.props.sortItems(label);
     }
 
     render() {
+        const { numberOfRecords } = this.state;
+        const { formFields, sorting } = this.props;
+
         return (
             <thead>
                 <tr>
                     {
-                        this.props.properties.map((property) => {
-                            const dataType = this.getDataType(property);
-                            const label = Header.translate(property);
-                            const singleRecord = this.props.numberOfRecords === 1;
-                            // const className = (!singleRecord && this.props.lastSort.property === property) ? this.props.lastSort.direction : null;
-                            const clickEvent = !singleRecord ? () => this.handleClick() : null;
+                        formFields.map((field) => {
+                            const { label, dataType } = field;
+                            const isSingleRecord = numberOfRecords === 1;
+                            const className = (!isSingleRecord && sorting.lastPropName === Header.labelToId(label)) ? sorting.lastDirection : null;
 
                             return (
-                                <td key={label} data-type={dataType} >
-                                    <button onClick={clickEvent}>
+                                <td key={label} data-type={dataType} className={className}>
+                                    <button onClick={!isSingleRecord ? () => this.handleClick(label) : null}>
                                         {label}
                                     </button>
                                 </td>
@@ -116,11 +134,12 @@ class Header extends Component {
 }
 
 export default connect((store) => {
-    const { items, formFields } = store.data;
+    const { items, formFields, sorting } = store.data;
 
     return {
         items,
-        formFields
+        formFields,
+        sorting
     };
 }, {
     sortItems

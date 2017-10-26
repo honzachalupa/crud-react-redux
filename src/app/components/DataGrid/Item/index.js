@@ -1,26 +1,29 @@
 import React, { Component, PropTypes } from 'react';
 
 export default class Item extends Component {
+    static labelToId(label) {
+        return label.replace(/\s/, '_').toLowerCase();
+    }
+
     redirectToDetail () {
         const { item, browserHistory } = this.props;
-
-        console.log(browserHistory);
 
         browserHistory.push(`/read/${item.id}`);
     }
 
     render() {
-        const { item } = this.props;
-        const itemWidthPerc = (100 / this.props.properties.length);
+        const { item, formFields } = this.props;
 
         return (
             <tr key={item.id} onClick={() => this.redirectToDetail()}>
                 {
-                    this.props.properties.map((property) => {
+                    formFields.map((field) => {
+                        const value = item[Item.labelToId(field.label)];
+
                         return (
-                            <td key={property} style={{ width: `${itemWidthPerc}%` }}>
+                            <td key={field.label} style={{ width: `${100 / formFields.length}%` }}>
                                 <p>
-                                    {item[property]}
+                                    {value}
                                 </p>
                             </td>
                         );
