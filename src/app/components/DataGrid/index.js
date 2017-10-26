@@ -6,6 +6,12 @@ import DataGridItem from './Item';
 function DataGrid (props) {
     const { items, formFields, browserHistory } = props;
 
+    if (items.length === 0) {
+        return (
+            <p>Create some records first.</p>
+        );
+    }
+
     return (
         <div data-tpl="DataGrid">
             <table>

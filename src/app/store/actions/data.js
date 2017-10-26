@@ -1,7 +1,7 @@
 export const ADD_ITEM = 'ADD_ITEM';
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
-export const SORT = 'SORT';
+export const SORT_ITEMS = 'SORT_ITEMS';
 
 export const add = (item) => ({
     type: ADD_ITEM,
@@ -20,7 +20,7 @@ export const remove = (id) => ({
 
 export const sort = (label) => {
     return {
-        type: SORT,
+        type: SORT_ITEMS,
         label
     };
 };

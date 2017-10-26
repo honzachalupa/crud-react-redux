@@ -1,46 +1,24 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
 
+export function isItemValid(item) {
+    let isValid = true;
+
+    Object.keys(item).forEach((key) => {
+        if (item[key] === null) {
+            isValid = false;
+        }
+
+        if (key === 'id') {
+            isValid = true;
+        }
+    });
+
+    return isValid;
+}
+
 export function getIdFromLabel(label) {
     return label.replace(/\s/, '_').toLowerCase();
-}
-
-export function getItemId(name) {
-    return Number(getUrlParameter('id'));
-}
-
-export function getSelectedItem(id, items) {
-    let matchingItem = null;
-
-    if (items.length > 0) {
-        items.forEach((item) => {
-            if (item.id === id) {
-                matchingItem = item;
-            }
-        });
-    }
-
-    if (matchingItem) {
-        return matchingItem;
-    }
-
-    return window.location.hash = '/';
-}
-
-export function getUrlParameter(name) {
-    const url = window.location.href;
-    const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-    const results = regex.exec(url);
-
-    if (!results) {
-        return null;
-    }
-
-    if (!results[2]) {
-        return '';
-    }
-
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
 export function renderMessage(style, message) {

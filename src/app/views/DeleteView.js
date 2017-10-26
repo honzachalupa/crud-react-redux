@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { remove as deleteItem } from '../store/actions/data';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { getSelectedItem, getItemId, renderMessage } from './../helpers';
-import jQuery from 'jquery';
 import Toastr from 'toastr';
 
 class DeleteView extends Component {

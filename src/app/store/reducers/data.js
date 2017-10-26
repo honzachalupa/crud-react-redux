@@ -1,4 +1,5 @@
 import * as actions from './../actions/data';
+import { getIdFromLabel } from './../../helpers';
 
 const defaultState = {
     sorting: {
@@ -24,6 +25,9 @@ const defaultState = {
         }, {
             label: 'Start date',
             dataType: 'date'
+        }, {
+            label: 'Test field',
+            dataType: 'text'
         }
     ],
     items: [
@@ -92,10 +96,10 @@ export default function data(state = defaultState, action) {
                 })
             };
         }
-        case actions.SORT: {
+        case actions.SORT_ITEMS: {
             const { label } = action;
             const { items, sorting, formFields } = state;
-            const { items: itemsSorted, metadata } = sort(labelToId(label), items, sorting, formFields);
+            const { items: itemsSorted, metadata } = sort(getIdFromLabel(label), items, sorting, formFields);
 
             return {
                 ...state,
@@ -108,20 +112,15 @@ export default function data(state = defaultState, action) {
     }
 }
 
-function labelToId(label) {
-    return label.replace(/\s/, '_').toLowerCase();
-}
-
 function generateId(items) {
     const existingIds = [];
+    const generatedId = Math.round(Math.random() * 10000).toString();
 
     if (items) {
         items.forEach((item) => {
             existingIds.push(item.id);
         });
     }
-
-    const generatedId = Math.round(Math.random() * 10000).toString();
 
     if (existingIds.indexOf(generatedId) > -1 || generatedId < 1000 || generatedId > 9999) {
         generateId();
@@ -134,7 +133,7 @@ function getDataType(id, formFields) {
     let dataType;
 
     formFields.forEach((field) => {
-        if (labelToId(field.label) === id.toString()) {
+        if (getIdFromLabel(field.label) === id.toString()) {
             dataType = field.dataType;
         }
     });
@@ -142,16 +141,13 @@ function getDataType(id, formFields) {
     return dataType;
 }
 
-function sort(id, items, metadata, fields) {
-    const propertyName = id;
-    const propertyType = getDataType(id, fields);
+function sort(propertyName, items, metadata, fields) {
+    const propertyType = getDataType(propertyName, fields);
     const itemsClone = [...items];
     const metadataClone = { ...metadata };
 
     if (metadataClone.lastPropName === propertyName && metadataClone.lastDirection === 'original') {
         if (propertyType !== 'number') {
-            console.log(1);
-
             itemsClone.sort((a, b) => {
                 if (a[propertyName] < b[propertyName]) {
                     return 1;
@@ -162,8 +158,6 @@ function sort(id, items, metadata, fields) {
                 return 0;
             });
         } else {
-            console.log(2);
-
             itemsClone.sort((a, b) => {
                 return b[propertyName] - a[propertyName];
             });
@@ -176,8 +170,6 @@ function sort(id, items, metadata, fields) {
         }
     } else {
         if (propertyType !== 'number') {
-            console.log(3);
-
             itemsClone.sort((a, b) => {
                 if (a[propertyName] < b[propertyName]) {
                     return -1;
@@ -188,8 +180,6 @@ function sort(id, items, metadata, fields) {
                 return 0;
             });
         } else {
-            console.log(4);
-
             itemsClone.sort((a, b) => {
                 return a[propertyName] - b[propertyName];
             });
@@ -200,56 +190,8 @@ function sort(id, items, metadata, fields) {
 
     metadataClone.lastPropName = propertyName;
 
-    console.log(metadataClone);
-
-    return { items: itemsClone, metadata: metadataClone };
-}
-
-/* function sortFunction(items, property) {
-    if (propertyPrev !== property || lastDirection === 'reversed') {
-        if (dataType === 'number') {
-            items.sort((a, b) => {
-                return a[property] - b[property];
-            });
-        } else {
-            items.sort((a, b) => {
-                if (a[property] < b[property]) {
-                    return -1;
-                } else if (a[property] > b[property]) {
-                    return 1;
-                }
-
-                return 0;
-            });
-        }
-    } else {
-        if (dataType === 'number') {
-            items.sort((a, b) => {
-                return b[property] - a[property];
-            });
-        } else {
-            items.sort((a, b) => {
-                if (a[property] < b[property]) {
-                    return 1;
-                } else if (a[property] > b[property]) {
-                    return -1;
-                }
-
-                return 0;
-            });
-        }
-    }
-
-    const dataType = '';
-    const lastDirection = '';
-
     return {
-        items: '',
-        sorted: {
-            propertyPrev: property,
-            property,
-            dataType,
-            lastDirection: lastDirection === 'reversed' ? 'original' : 'reversed'
-        }
+        items: itemsClone,
+        metadata: metadataClone
     };
-} */
+}

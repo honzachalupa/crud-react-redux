@@ -3,12 +3,9 @@ import { connect } from 'react-redux';
 import { Button, ButtonGroup, Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap';
 import jQuery from 'jquery';
 import CKEditor from 'react-ckeditor-component';
+import { getIdFromLabel } from './../../helpers';
 
 class GenericForm extends Component {
-    static labelToId(label) {
-        return label.replace(/\s/, '_').toLowerCase();
-    }
-
     constructor(props) {
         super(props);
 
@@ -16,14 +13,23 @@ class GenericForm extends Component {
         const itemDataPlaceholder = {};
 
         if (item) {
+            formFields.forEach((field) => {
+                const id = getIdFromLabel(field.label);
+
+                if (Object.keys(item).indexOf(id) === -1) {
+                    item[id] = null;
+                }
+            });
+
             this.state = {
                 isReadOnly,
                 item
             };
         } else if (formFields) {
             formFields.forEach((field) => {
-                const key = GenericForm.labelToId(field.label);
-                itemDataPlaceholder[key] = null;
+                const id = getIdFromLabel(field.label);
+
+                itemDataPlaceholder[id] = null;
             });
 
             this.state = {
@@ -63,7 +69,7 @@ class GenericForm extends Component {
         const { item } = this.state;
 
         const fieldsFiltered = formFields.filter((field) => {
-            if (GenericForm.labelToId(field.label) === 'id') {
+            if (getIdFromLabel(field.label) === 'id') {
                 return 0;
             }
 
@@ -71,7 +77,7 @@ class GenericForm extends Component {
         });
 
         const fieldsBlock = fieldsFiltered.map((field) => {
-            const id = GenericForm.labelToId(field.label);
+            const id = getIdFromLabel(field.label);
             let inputBlock;
 
             if (field.dataType === 'richtext') {

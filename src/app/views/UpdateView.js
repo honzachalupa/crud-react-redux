@@ -6,10 +6,8 @@ import { FormGroup, Button, ButtonGroup, Col } from 'react-bootstrap';
 import Form from './../components/Form';
 import FormHeader from './../components/Form/Header';
 import FormFooter from './../components/Form/Footer';
-import { getSelectedItem, getItemId } from './../helpers';
-import jQuery from 'jquery';
+import { getSelectedItem, getItemId, isItemValid } from './../helpers';
 import Toastr from 'toastr';
-import CKEditor from 'react-ckeditor-component';
 
 class UpdateView extends Component {
     constructor(props) {
@@ -38,11 +36,14 @@ class UpdateView extends Component {
     handleSave() {
         const { item } = this.state;
 
-        this.props.updateItem(item);
+        if (isItemValid(item)) {
+            Toastr.success('Employee\'s details were updated.');
 
-        Toastr.success('Employee\'s details were updated.');
-
-        this.props.history.push('/');
+            this.props.updateItem(item);
+            this.props.history.push('/');
+        } else {
+            Toastr.error('Please fill all fields...', 'Error');
+        }
     }
 
     handleCancel() {

@@ -7,14 +7,37 @@ import UpdateView from '../views/UpdateView';
 import DeleteView from '../views/DeleteView';
 
 export default function Root() {
+    const pages = [
+        {
+            path: '/',
+            component: MainView
+        }, {
+            path: '/create',
+            component: CreateView
+        }, {
+            path: '/read/:id',
+            component: ReadView
+        }, {
+            path: '/update/:id',
+            component: UpdateView
+        }, {
+            path: '/delete/:id',
+            component: DeleteView
+        }
+    ];
     return (
         <Router>
             <Switch>
-                <Route path="/" exact component={MainView} />
-                <Route path="/create" component={CreateView} />
-                <Route path="/read/:id" component={ReadView} />
-                <Route path="/update/:id" component={UpdateView} />
-                <Route path="/delete/:id" component={DeleteView} />
+                {
+                    pages.map((page, i) => {
+                        const { path, component } = page;
+                        const key = path.replace(/[/:]/g, '');
+
+                        return (
+                            <Route key={key} path={path} exact component={component} />
+                        );
+                    })
+                }
             </Switch>
         </Router>
     );

@@ -7,24 +7,9 @@ import Form from './../components/Form';
 import FormHeader from './../components/Form/Header';
 import FormFooter from './../components/Form/Footer';
 import Toastr from 'toastr';
+import { isItemValid } from './../helpers';
 
 class CreateView extends Component {
-    static isValid(item) {
-        let isValid = true;
-
-        Object.keys(item).forEach((key) => {
-            if (item[key] === null) {
-                isValid = false;
-            }
-
-            if (key === 'id') {
-                isValid = true;
-            }
-        });
-
-        return isValid;
-    }
-
     constructor() {
         super();
 
@@ -41,7 +26,7 @@ class CreateView extends Component {
     createItem() {
         const { item } = this.state;
 
-        if (CreateView.isValid(item)) {
+        if (isItemValid(item)) {
             Toastr.success('New employee was added...', 'Great!');
 
             this.props.addItem(item);

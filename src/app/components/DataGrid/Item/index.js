@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { getIdFromLabel } from './../../../helpers';
 
 export default class Item extends Component {
-    static labelToId(label) {
-        return label.replace(/\s/, '_').toLowerCase();
-    }
-
     redirectToDetail () {
         const { item, browserHistory } = this.props;
 
@@ -18,7 +15,7 @@ export default class Item extends Component {
             <tr key={item.id} onClick={() => this.redirectToDetail()}>
                 {
                     formFields.map((field) => {
-                        const value = item[Item.labelToId(field.label)];
+                        const value = item[getIdFromLabel(field.label)];
 
                         return (
                             <td key={field.label} style={{ width: `${100 / formFields.length}%` }}>

@@ -4,10 +4,6 @@ import { sort as sortItems } from './../../store/actions/data';
 import { getIdFromLabel } from './../../helpers';
 
 class Header extends Component {
-    static labelToId(label) {
-        return label.replace(/\s/, '_').toLowerCase();
-    }
-
     constructor(props) {
         super(props);
 
@@ -52,7 +48,7 @@ class Header extends Component {
                         formFields.map((field) => {
                             const { label, dataType } = field;
                             const isSingleRecord = numberOfRecords === 1;
-                            const className = (!isSingleRecord && sorting.lastPropName === Header.labelToId(label)) ? sorting.lastDirection : null;
+                            const className = (!isSingleRecord && sorting.lastPropName === getIdFromLabel(label)) ? sorting.lastDirection : null;
 
                             return (
                                 <td key={label} data-type={dataType} className={className}>
